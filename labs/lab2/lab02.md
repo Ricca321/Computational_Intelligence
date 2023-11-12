@@ -45,7 +45,9 @@ The training process involves multiple generations of evolving the agent populat
 Users can experiment with different agent strategies by adjusting the initial genotype parameters, mutation rates, and other hyperparameters in the code. Observing the impact of these changes on the agent's performance provides insights into the dynamics of the learning process.
 
 ## Conclusion 
-The agent with genotype [0,-2] has a winning rate on avarage of 37% wiht the optimal algorithm.
+The agent with genotype [-2,-1] has a winning rate on avarage of 36% against the optimal algorithm.
+![Fitness of Agent vs Optimal over generation](https://example.com/image.jpg)
+![Win rates of 1000 matches divided in 100 games batches](https://example.com/image.jpg)
 
 ## Contributing
 Made with the contribuition of Andrea Sillano s314771
