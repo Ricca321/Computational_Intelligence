@@ -4,15 +4,15 @@ This program implements an evolutionary algorithm based on Evolution Strategies 
 
 ### Definition of Parent Selection Functions:
 
-parent_selection: Implements a tournament among random individuals from the population and returns the best one based on fitness.
+_parent_selection_: Implements a tournament among random individuals from the population and returns the best one based on fitness.
 
 ### Definition of Genetic Operators:
 
-xover: Implements the crossover (recombination) operator between two parents.
-mutateRandom: Implements a mutation operator that randomly changes a bit in the individual's genotype.
-mutateFlip: Implements a mutation operator which flips randomly a bit in the Individual's genotype.
-mutate: Implements a mutation operator that randomly select a bit in the individual's genotype and set it to 1.
-one_cut_xover: Implements a variant of crossover called "one-cut crossover."
+- **xover**: Implements the crossover (recombination) operator between two parents.
+- **mutateRandom**: Implements a mutation operator that randomly changes a bit in the individual's genotype.
+- **mutateFlip**: Implements a mutation operator which flips randomly a bit in the Individual's genotype.
+- **mutate**: Implements a mutation operator that randomly select a bit in the individual's genotype and set it to 1.
+- **one_cut_xover**: Implements a variant of crossover called "one-cut crossover."
 
 
 ### Implementation of Adaptive Strategies for Mutation and Crossover:
@@ -71,10 +71,10 @@ both always use MR = 0.2 and CR = 0.8 in static configurations
 
 |   |  (1+λ) | (1+λ) rates |(1+λ) Results| (1,λ) | (1,λ) rates  |(1,λ) Results |
 :-------------------------:|:-------------------------: |:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|
-| **mutateFlip, dynamic** | ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/VARIABLE_RATES_MUTATION_FLIP_PLUS_ILM.png) | ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/VARIABLE_RATES_MUTATION_FLIP_PLUS_ILM_RATES.png)|Fitness call = 60100 <br/> Fitness = 0.939 <br/> Generation level = 3000 | | | Fitness call = 167400 <br/> Fitness = 1.0 <br/> Generation level = 1670|
-| **mutate, dynamic**|  ![]()| | Fitness call = 33500 <br/> Fitness = 1.0 <br/> Generation level = 1670| | |Fitness call = 8700 <br/> Fitness = 1.0 <br/> Generation level = 86 |
-| **mutateFlip, static**| |![](outputs/output_Biotouch/18-15_02-02-2018/Verification/ITALIC/ITALIC_movementPoints_notbalanced_frrVSfpr.png)  | Fitness call = 60100 <br/> Fitness = 0.985 <br/> Generation level = 3000| | | Fitness call = 56600 <br/> Fitness = 1.0 <br/> Generation level = 565|
-| **mutate, static**|  ![]()| |Fitness call = 37380 <br/> Fitness = 1.0 <br/> Generation level = 1864 | | |Fitness call = 56500 <br/> Fitness = 1.0 <br/> Generation level = 564 |
+| **mutateFlip, dynamic** | ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/VARIABLE_RATES_MUTATION_FLIP_PLUS_ILM.png) | ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/VARIABLE_RATES_MUTATION_FLIP_PLUS_ILM_RATES.png)|Fitness call = 60100 <br/> Fitness = 0.939 <br/> Generation level = 3000 |![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/VARIABLE_RATES_MUTATION_FLIP_COMMA_DHM.png) | ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/VARIABLE_RATES_MUTATION_FLIP_COMMA_DHM_RATES.png)| Fitness call = 167400 <br/> Fitness = 1.0 <br/> Generation level = 1670|
+| **mutate, dynamic**|  ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/VARIABLE_RATES_MUTATION_1_PLUS_ILM.png)| ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/VARIABLE_RATES_MUTATION_1_PLUS_ILM_RATES.png)| Fitness call = 33500 <br/> Fitness = 1.0 <br/> Generation level = 1670| ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/VARIABLE_RATES_MUTATION_1_COMMA_DHM.png)| ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/VARIABLE_RATES_MUTATION_1_COMMA_DHM_RATES.png)|Fitness call = 8700 <br/> Fitness = 1.0 <br/> Generation level = 86 |
+| **mutateFlip, static**|![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/STATIC_RATES_MUTATION_FLIP_PLUS_ILM.png) |![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/STATIC_RATES_MUTATION_FLIP_PLUS_ILM_RATES.png)  | Fitness call = 60100 <br/> Fitness = 0.985 <br/> Generation level = 3000| ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/STATIC_RATES_MUTATION_FLIP_COMMA_DHM.png)|![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/STATIC_RATES_MUTATION_FLIP_COMMA_DHM_RATES.png) | Fitness call = 56600 <br/> Fitness = 1.0 <br/> Generation level = 565|
+| **mutate, static**|  ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/STATIC_RATES_MUTATION_1_PLUS_ILM.png)| ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/STATIC_RATES_MUTATION_1_PLUS_ILM_RATES.png)|Fitness call = 37380 <br/> Fitness = 1.0 <br/> Generation level = 1864 |![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/STATIC_RATES_MUTATION_1_COMMA_DHM.png) | ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/STATIC_RATES_MUTATION_1_COMMA_DHM_RATES.png)|Fitness call = 56500 <br/> Fitness = 1.0 <br/> Generation level = 564 |
 
 # BIG - Problem Size = 10
 
@@ -84,10 +84,10 @@ both always use MR = 0.2 and CR = 0.8 in static configurations
 
 |   |  (1+λ) | (1+λ) rates |(1+λ) Results| (1,λ) | (1,λ) rates  |(1,λ) Results |
 :-------------------------:|:-------------------------: |:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|
-| **mutateFlip, dynamic** | ![](DHMcmu1r.png) | |Fitness call = 60100 <br/> Fitness = 0.28 <br/> Generation level = 3000 | | | Fitness call = 178300 <br/> Fitness = 1.0 <br/> Generation level = 1782|
-| **mutate, dynamic**|  ![]()| | Fitness call = 60100 <br/> Fitness = 0.62 <br/> Generation level = 3000| | |Fitness call = 7100 <br/> Fitness = 1.0 <br/> Generation level = 70 |
-| **mutateFlip, static**| |![](outputs/output_Biotouch/18-15_02-02-2018/Verification/ITALIC/ITALIC_movementPoints_notbalanced_frrVSfpr.png)  | Fitness call = 60100 <br/> Fitness = 0.27 <br/> Generation level = 3000| | | Fitness call = 58100 <br/> Fitness = 1.0 <br/> Generation level = 580|
-| **mutate, static**|  ![]()| |Fitness call = 60100 <br/> Fitness = 0.31 <br/> Generation level = 3000 | | |Fitness call = 53800 <br/> Fitness = 1.0 <br/> Generation level = 537 |
+| **mutateFlip, dynamic** | ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_VARIABLE_RATES_MUTATION_FLIP_PLUS_ILM.png) |![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_VARIABLE_RATES_MUTATION_FLIP_PLUS_ILM_RATES.png) |Fitness call = 60100 <br/> Fitness = 0.28 <br/> Generation level = 3000 |![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_VARIABLE_RATES_MUTATION_FLIP_COMMA_DHM.png) |![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_VARIABLE_RATES_MUTATION_FLIP_COMMA_DHM_RATES.png) | Fitness call = 178300 <br/> Fitness = 1.0 <br/> Generation level = 1782|
+| **mutate, dynamic**|  ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_VARIABLE_RATES_MUTATION_1_PLUS_ILM.png)| ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_VARIABLE_RATES_MUTATION_1_PLUS_ILM_RATES.png)| Fitness call = 60100 <br/> Fitness = 0.62 <br/> Generation level = 3000| ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_VARIABLE_RATES_MUTATION_1_COMMA_DHM.png)|![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_VARIABLE_RATES_MUTATION_1_COMMA_DHM_RATES.png) |Fitness call = 7100 <br/> Fitness = 1.0 <br/> Generation level = 70 |
+| **mutateFlip, static**|![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_STATIC_RATES_MUTATION_FLIP_PLUS_ILM.png) |![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_STATIC_RATES_MUTATION_FLIP_PLUS_ILM_RATES.png)| Fitness call = 60100 <br/> Fitness = 0.27 <br/> Generation level = 3000| ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_STATIC_RATES_MUTATION_FLIP_COMMA_DHM.png)|![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_STATIC_RATES_MUTATION_FLIP_COMMA_DHM_RATES.png) | Fitness call = 58100 <br/> Fitness = 1.0 <br/> Generation level = 580|
+| **mutate, static**|  ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_%20STATIC_RATES_MUTATION_1_PLUS_ILM.png)| ![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_%20STATIC_RATES_MUTATION_1_PLUS_ILM_RATES.png)|Fitness call = 60100 <br/> Fitness = 0.31 <br/> Generation level = 3000 |![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_%20STATIC_RATES_MUTATION_1_COMMA_DHM.png) |![](https://github.com/Ricca321/Computational_Intelligence/blob/main/labs/lab9/images/BIG_%20STATIC_RATES_MUTATION_1_COMMA_DHM_RATES.png) |Fitness call = 53800 <br/> Fitness = 1.0 <br/> Generation level = 537 |
 
 ## Consideration
 
