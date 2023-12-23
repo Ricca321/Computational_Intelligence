@@ -61,7 +61,7 @@ The _InputHandler_ class is used to handle user input during human vs. AI gamepl
 
 ## Conclusion:
 In summary, the code serves as an exploration of reinforcement learning techniques in the context of Tic-Tac-Toe. It demonstrates how an AI player can learn and adapt its strategy through reinforcement, and it provides avenues for evaluating and interacting with the trained agent. Our implementation tries to find the optimal positions to win the game; since it is not a complete Montecarlo strategy (because it does not generate all the possible states), it suffers against a real player because it can't block his/her moves.
-In the end our model reaches good performances against a random model (about 70% win rate), this proves that the reinforcement learning technique is able to find an "optimal" strategy to win in most of the cases.
+In the end our model reaches good performances against a random model (about 75% win rate), this proves that the reinforcement learning technique is able to find an "optimal" strategy to win in most of the cases.
 
 ## Contribution
 Made with the contribuition of Andrea Sillano s314771
