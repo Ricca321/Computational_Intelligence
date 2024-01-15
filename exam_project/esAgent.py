@@ -8,24 +8,19 @@ from random import choice, randint
 from tqdm import tqdm
 from scipy.special import softmax
 import pickle
-
-GENERATION_SIZE = 50
+import matplotlib.pyplot as plt
+import math
+GENERATION_SIZE = 10
 PARENT_SIZE = 2
-TOURNAMENT_SIZE = 10
-POPULATION_SIZE = 50
-OFFSPRING_SIZE = 20
+TOURNAMENT_SIZE = 5
+POPULATION_SIZE = 25
+OFFSPRING_SIZE = 10
 EPSILON = 0.15
 MUTATION = 0.1
 TRAINING_PLAY_SIZE = 100
 
 
 class EsPlayer(Player):
-   
-    status = tuple
-    fitnes = float
-    opponent_moves = list()
-    moves_probability = []
-
    
     def __init__(self) -> None:
         super().__init__()
@@ -184,6 +179,7 @@ class EsPlayer(Player):
 
     def training(self):
         population = self.__init_population__()
+        fitness_list = []
         print("STARTING TRAINING")
         for _ in tqdm(range(GENERATION_SIZE)):
             offspring = []
@@ -201,12 +197,14 @@ class EsPlayer(Player):
             population.extend(offspring)
             population.sort(key=lambda i: i.fitness, reverse=True)
             population = population[:POPULATION_SIZE]
-            
+            fitness_list.append(population[0].fitness)
             print(population[0].fitness)
         print("POLICY SAVED!")
         self.savePolicy(population[0])
+        self.__plotter__(fitness_list)
         print(population[0])
-            #fitness_list.append(population[0].fitness)
+            
+        
 
     def __init_population__(self):
         population = [EsPlayer() for _ in range(POPULATION_SIZE)]
@@ -218,6 +216,7 @@ class EsPlayer(Player):
 
     def __training_play__(self, agent):
         win_count = 0
+
         for _ in range(TRAINING_PLAY_SIZE):
             g = Game()
             player1 = agent
@@ -242,3 +241,12 @@ class EsPlayer(Player):
             if winner == self.id:
                 win_count+=1
         print((win_count/TRAINING_PLAY_SIZE)*100)
+
+    def __plotter__(self,fitness_list: list):
+        generations = list(range(1, len(fitness_list) + 1))
+        plt.plot(generations, fitness_list, marker='o', linestyle='-', color='b')
+        plt.title('Fitness Over Generations')
+        plt.xlabel('Generation')
+        plt.ylabel('Fitness')
+        plt.grid(True)
+        plt.show()

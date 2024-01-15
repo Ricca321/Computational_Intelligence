@@ -7,12 +7,14 @@ import numpy as np
 import math
 from tqdm import tqdm
 import pickle
+import matplotlib.pyplot as plt
 
-TRAINING_PLAY_SIZE = 1000
+TRAINING_PLAY_SIZE = 5000
 LR = 0.3
 DECAY = 5
 EPSILON = 0.05
 VALID_INDEX = [0,1,2,3,4,5,9,10,14,15,19,20,21,22,23,24]
+BATCH = 100
 
 class RLPlayer(Player):
     def __init__(self) -> None:
@@ -47,7 +49,7 @@ class RLPlayer(Player):
         if random.random() < self.epsilon:
             row = random.randint(0,4)
             column = random.randint(0,4)
-            while game.get_board()[row][column] == 1-self.id or not self.__check_border__((row,column),0, game.get_board()):
+            while game.get_board()[row][column] == 1-self.id or not self.__check_border__((row,column),self.id, game.get_board()):
                 row = random.randint(0,4)
                 column = randint(0,4)
             move = random.choice([Move.TOP, Move.BOTTOM, Move.LEFT, Move.RIGHT])
@@ -177,8 +179,14 @@ class RLPlayer(Player):
     def __training_play__(self, agent):
             
             win_count = 0
+            avg_win_hist =[]
+            epsilon_hist=[]
+            win_counter = 0
+            batch = 1
+
             for i in  tqdm(range(TRAINING_PLAY_SIZE)):
                 self.epsilon = 1* math.exp(-((i*DECAY)/(TRAINING_PLAY_SIZE-1)))
+                epsilon_hist.append(self.epsilon)
                 g = Game()
                 player1 = agent
                 player2 = randomAgent.RandomPlayer()
@@ -187,15 +195,25 @@ class RLPlayer(Player):
                 #g.print()
                 #print(winner)
                 self.__stick_and_carrots__(winner, 1)
-                if winner == 0:
+                batch+=1
+                if winner == self.id:
                     win_count+=1
+                    win_counter+=1
+
+                if batch == BATCH:
+                    batch = 1
+                    avg_win_hist.append((win_counter/(BATCH))*100)
+                    win_counter = 0
+
                 #print(self.table_points)
             print((win_count/TRAINING_PLAY_SIZE)*100)
             print("SAVED POLICY")
             #print(self.table_prob)
             print("SAVED MOVE POLICY")
             #print(self.table_move_prob)
-            self.savePolicy()
+            #self.savePolicy()
+            self.__plotter__(epsilon_hist,avg_win_hist)
+            #print(avg_win_hist)
             return (win_count/TRAINING_PLAY_SIZE)*100
 
     def play_for_statistics(self):
@@ -214,3 +232,22 @@ class RLPlayer(Player):
             if winner == self.id:
                 win_count+=1
         print((win_count/TRAINING_PLAY_SIZE)*100)
+
+    def __plotter__(self,epsilon: list, win: list):
+        episode =list(range(1, len(epsilon) + 1))
+        plt.plot(episode,epsilon, marker='o', linestyle='-', color='b')
+        plt.title('Epsilon Decay')
+        plt.xlabel('Episode')
+        plt.ylabel('Epsilon')
+        plt.grid(True)
+        plt.savefig('EPSILON_DECAY')
+        plt.show() 
+
+        episode = list(range(1, int(TRAINING_PLAY_SIZE/BATCH) +1))
+        plt.plot(episode,win, marker='o', linestyle='-', color='r')
+        plt.title('Win Rate over Episode')
+        plt.xlabel('Episode')
+        plt.ylabel('Win Rate')
+        plt.grid(True)
+        plt.savefig('WINNING RATE')
+        plt.show() 
