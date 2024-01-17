@@ -22,7 +22,7 @@ class Player(ABC):
         pass
 
     @abstractmethod
-    def make_move(self, game: 'Game') -> tuple[tuple[int, int], Move]:
+    def make_move(self, game: 'GameGym') -> tuple[tuple[int, int], Move]:
         '''
         The game accepts coordinates of the type (X, Y). X goes from left to right, while Y goes from top to bottom, as in 2D graphics.
         Thus, the coordinates that this method returns shall be in the (X, Y) format.
@@ -33,9 +33,9 @@ class Player(ABC):
         pass
 
 
-class Game(object):
-    def __init__(self) -> None:
-        self._board = np.ones((5, 5), dtype=np.uint8) * -1
+class GameGym(object):
+    def __init__(self, board = np.ones((5, 5), dtype=np.uint8) * -1) -> None:
+        self._board = board#np.ones((5, 5), dtype=np.uint8) * -1
         self.current_player_idx = 1
 
     def get_board(self) -> np.ndarray:
@@ -54,6 +54,7 @@ class Game(object):
         '''Prints the board. -1 are neutral pieces, 0 are pieces of player 0, 1 pieces of player 1'''
         print(self._board)
 
+    
     def check_winner(self) -> int:
         '''Check the winner. Returns the player ID of the winner if any, otherwise returns -1'''
         # for each row
@@ -95,11 +96,11 @@ class Game(object):
             while not ok:
                 from_pos, slide = players[self.current_player_idx].make_move(
                     self)
-                ok = self.__move(from_pos, slide, self.current_player_idx)
+                ok = self.move(from_pos, slide, self.current_player_idx)
             winner = self.check_winner()
         return winner
 
-    def __move(self, from_pos: tuple[int, int], slide: Move, player_id: int) -> bool:
+    def move(self, from_pos: tuple[int, int], slide: Move, player_id: int) -> bool:
         '''Perform a move'''
         if player_id > 2:
             return False

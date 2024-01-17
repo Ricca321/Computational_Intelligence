@@ -10,11 +10,10 @@ from scipy.special import softmax
 import pickle
 import matplotlib.pyplot as plt
 import math
-GENERATION_SIZE = 10
-PARENT_SIZE = 2
-TOURNAMENT_SIZE = 5
-POPULATION_SIZE = 25
-OFFSPRING_SIZE = 10
+GENERATION_SIZE = 50
+TOURNAMENT_SIZE = 10
+POPULATION_SIZE = 100
+OFFSPRING_SIZE = 20
 EPSILON = 0.15
 MUTATION = 0.1
 TRAINING_PLAY_SIZE = 100
@@ -249,4 +248,5 @@ class EsPlayer(Player):
         plt.xlabel('Generation')
         plt.ylabel('Fitness')
         plt.grid(True)
+        plt.savefig('ES_FITNESS')
         plt.show()

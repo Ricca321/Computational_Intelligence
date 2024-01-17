@@ -9,7 +9,7 @@ from tqdm import tqdm
 import pickle
 import matplotlib.pyplot as plt
 
-TRAINING_PLAY_SIZE = 5000
+TRAINING_PLAY_SIZE = 10000
 LR = 0.3
 DECAY = 5
 EPSILON = 0.05
@@ -76,6 +76,7 @@ class RLPlayer(Player):
                 table_element_index = np.random.choice(table_index, p=probabilities)
 
             table_element = flattened_table_points_table[table_element_index]
+           
             #tableElement  = np.random.choice(self.table_points, p = softmax(self.table_prob))
             moves = [Move.TOP, Move.BOTTOM, Move.LEFT, Move.RIGHT]
             row = table_element[0][1]
@@ -140,14 +141,16 @@ class RLPlayer(Player):
     def __stick_and_carrots__(self,winner, training):
         MUL = 0
         
-        if winner == 0: 
+        if winner == self.id: 
             MUL = 1
-            
+        else:
+             MUL = -1
         for i in range(5):
             for j in range(5):
                 #print(self.table_points[i][j])
                 if  self.table_points[i][j][2] >= 1:
                     reward = ((MUL - self.table_prob[i][j])*LR)/self.table_points[i][j][2]
+                    #reward = 1/(1+math.exp(-reward))
                     self.table_prob[i][j] = self.table_prob[i][j] + reward*training
                     used_move = self.table_points[i][j][1]
                     moves = [Move.TOP, Move.BOTTOM, Move.LEFT, Move.RIGHT]
@@ -196,6 +199,7 @@ class RLPlayer(Player):
                 #print(winner)
                 self.__stick_and_carrots__(winner, 1)
                 batch+=1
+                
                 if winner == self.id:
                     win_count+=1
                     win_counter+=1
@@ -211,7 +215,7 @@ class RLPlayer(Player):
             #print(self.table_prob)
             print("SAVED MOVE POLICY")
             #print(self.table_move_prob)
-            #self.savePolicy()
+            self.savePolicy()
             self.__plotter__(epsilon_hist,avg_win_hist)
             #print(avg_win_hist)
             return (win_count/TRAINING_PLAY_SIZE)*100
@@ -238,7 +242,7 @@ class RLPlayer(Player):
         plt.plot(episode,epsilon, marker='o', linestyle='-', color='b')
         plt.title('Epsilon Decay')
         plt.xlabel('Episode')
-        plt.ylabel('Epsilon')
+        plt.ylabel('Epsilon') 
         plt.grid(True)
         plt.savefig('EPSILON_DECAY')
         plt.show() 

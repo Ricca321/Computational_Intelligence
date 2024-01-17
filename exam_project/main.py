@@ -2,7 +2,12 @@ import random
 from game import Game, Move, Player
 import esAgent
 import rlAgent
+import minMaxAgent
+from tqdm import tqdm
+import threading
+
 NUMBER_OF_PLAYS = 1000
+
 class RandomPlayer(Player):
     def __init__(self) -> None:
         super().__init__()
@@ -29,32 +34,38 @@ def playWithTrainedAgent():
     playerES = esAgent.EsPlayer()
     playerES.loadPolicy("policyES")
     playerRandom = RandomPlayer()
+    minMaxAg = minMaxAgent.minMaxPlayer()
+
     count = 0
-    for _ in range(NUMBER_OF_PLAYS):
+    for _ in tqdm(range(NUMBER_OF_PLAYS)):
         g = Game()
-        winner = g.play(playerRL, playerES)
+        winner = g.play(playerRL,playerRandom)
         if winner == 0:
             count += 1
-    print(count*100/NUMBER_OF_PLAYS)
+
+    print(f"Winning Rate: {count*100/NUMBER_OF_PLAYS}%")
 
 
 if __name__ == '__main__':
     playWithTrainedAgent()
-    #g = Game()
+    playerRandom = RandomPlayer()
+    minMaxAg = minMaxAgent.minMaxPlayer()
+   
+    #winner = g.play(minMaxAg, playerRandom)
+    #print(f"Winner: {winner}")
+
     #g.print()
-    #playerRL = rlAgent.RLPlayer()
+    playerRL = rlAgent.RLPlayer()
     
     #playerRL.training()
     #playerRL.play_for_statistics()
     
     
-    #playerES = esAgent.EsPlayer()
+    #layerES = esAgent.EsPlayer()
     #playerES.training()
     #playerES.play_for_statistics()
 
     #playerTest.printStatus()
     #player1 = MyPlayer()
     #player2 = RandomPlayer()
-    #winner = g.play(player1, player2)
-    #g.print()
-    #print(f"Winner: Player {winner}")
+
