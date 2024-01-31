@@ -54,7 +54,7 @@ Users can experiment with different agent strategies by adjusting the initial ge
 After the training, the best agent reached a fitness value of 80%.
 Although this result seems promising in the real game it is run dependent. By playing multiple batches of 100 games, the score varies from 54% to 72%.
 The grafic below shows the fitness over training.
-![]()
+![](https://github.com/Ricca321/Computational_Intelligence/blob/main/exam_project/images/fitness.png)
 
 
 ## RL algorithm
@@ -85,9 +85,9 @@ The reward is then added to the selected table_probabilities table_prob[pos_x][p
 
 At the end two plot are given:
 - _EPSILON_Decay_: We used an exponential decay. It starts from 1 with a decay = 5
-![]()
+![](https://github.com/Ricca321/Computational_Intelligence/blob/main/exam_project/images/EPSILON_DECAY.png)
 - _Winning_Rate_: In the practice phase we divided all the games in batches of 100 episodes on which the winning_rate is computed. After this the results are linearly interpolated in order to get a clear view 
-![]()
+![](https://github.com/Ricca321/Computational_Intelligence/blob/main/exam_project/images/Win%20Rate.png)
 
 #### Save and Load Policy
 
@@ -98,8 +98,7 @@ Once the training is finished, it is possible to store in a file the policy comp
 - _Load_policy: it allows the user to load the policy from a file
 
 ### Conclusion
-RL agent gets an average score of 55% on the last batch and in particular it seems to train itself as shown in the picture below. The winrate on the batches passes from 50% to 55%
-![]()
+RL agent gets an average score of 55% on the last batch and in particular it seems to train itself as shown in the previous graph (section plot). The winrate on the batches passes from 50% to 55%.
 This strategy allows the agent to not have a fixed approach related to the state but it depends on the softmax probabilities both for direction and cell selection.
 Moreover, in the training we compute a reduced number of states in order to avoid the policy to become excessively large and too much slow in computation (with 10000 games there are more than 200k states and the policy is 200 MB)
 
@@ -123,6 +122,7 @@ We also implement MinMax algorithm with alpha-beta pruning, a decision-making al
 
 ### Conclusion
 After multiple runs the average winrate of MinMax agent is 80% which proves to be the most effective strategy among the proposed ones.
+![](https://github.com/Ricca321/Computational_Intelligence/blob/main/exam_project/images/minmaxbatches.png)
 
 ## General and Final Considerations
 
