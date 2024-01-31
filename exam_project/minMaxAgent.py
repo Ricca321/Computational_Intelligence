@@ -19,7 +19,6 @@ class GameNode:
         super().__init__()
         self.game = deepcopy(current_game)
         self.state = current_game.get_board()
-        #add state value
         self.available_moves = available_moves
         self.children = []
         self.move = move
@@ -36,29 +35,44 @@ class GameNode:
         table_index_valid = [0,1,2,3,4,5,9,10,14,15,19,20,21,22,23,24]
         flattened_board = [item for sublist in current_board for item in sublist]
         moves = []
-        for i in table_index_valid:
-            if flattened_board[i] != 1 - ply_id:
-                if i<5:
-                    moves.append((i - 5*(i//5), i//5, Move.BOTTOM)) #first row can go BOTTOM, e.g id = 14 -> (4,2) | x = 14 - 5*14/5 = 14 - 10 = 4
-                                                                                                                #| y = 14/5 = 2
-                if i%5 == 0:
-                    moves.append((i - 5*(i//5), i//5, Move.RIGHT)) #first column can go RIGHT
-
-                if i>19:
-                    moves.append((i - 5*(i//5), i//5, Move.TOP)) #last row can go TOP
-                
-                if i%5 == 4:
-                    moves.append((i - 5*(i//5), i//5, Move.LEFT)) #last column can go LEFT
-
+        for i in table_index_valid: 
+            if flattened_board[i] != 1 - ply_id: 
+                if i<5: 
+                    moves.append((i - 5*(i//5), i//5, Move.BOTTOM)) #first row can go BOTTOM, e.g id = 14 -> (4,2) | x = 14 - 5*14/5 = 14 - 10 = 4 
+                                                                                                                #| y = 14/5 = 2 
+                    if i!=0 and i!=4: 
+                        moves.append((i - 5*(i//5), i//5, Move.LEFT) )
+                        moves.append((i - 5*(i//5), i//5, Move.RIGHT) )
+                         
+                if i%5 == 0: 
+                    moves.append((i - 5*(i//5), i//5, Move.RIGHT)) #first column can go RIGHT 
+ 
+                    if i!=0 and i!=20: 
+                        moves.append((i - 5*(i//5), i//5, Move.TOP) )
+                        moves.append((i - 5*(i//5), i//5, Move.BOTTOM) )
+ 
+                if i>19: 
+                    moves.append((i - 5*(i//5), i//5, Move.TOP)) #last row can go TOP 
+ 
+                    if i!=20 and i!=24: 
+                        moves.append((i - 5*(i//5), i//5, Move.LEFT) )
+                        moves.append((i - 5*(i//5), i//5, Move.RIGHT) )
+                 
+                if i%5 == 4: 
+                    moves.append((i - 5*(i//5), i//5, Move.LEFT)) #last column can go LEFT 
+ 
+                    if i!=0 and i!=20: 
+                        moves.append((i - 5*(i//5), i//5, Move.TOP) )
+                        moves.append((i - 5*(i//5), i//5, Move.BOTTOM))
         return moves
     
-    def __compute_tree__(self):
+    def __compute_tree__(self):        
         for move in self.available_moves:
-            self.game.move((move[0], move[1]), move[2], self.ply_id)
-            child = self.game.get_board()
-            self.__add_children__(GameNode(self.game, move, self.__get_available_moves(self.ply_id, child),self.ply_id, self ))
-
-
+         
+            current_board  = GameGym(np.array(self.game.get_board()))
+            current_board.move((move[0], move[1]), move[2], self.ply_id)
+            child = current_board.get_board()
+            self.__add_children__(GameNode(current_board, move, self.__get_available_moves(self.ply_id if self.parent == None else 1-self.ply_id, child), 1-self.ply_id, self ))
     def __evaluate__(self, matrix, sign):
         # Controlla le righe 
         max_row_count = max([row.count(sign) for row in matrix]) 
@@ -83,9 +97,7 @@ class GameTree:
         if len(current.children) > 0:
             for child in current.children:
                 child.__compute_tree__()
-                for grchild in child.children:
-                    grchild.__compute_tree__()
-                    
+   
 
         
 class minMaxPlayer(Player):
@@ -98,7 +110,7 @@ class minMaxPlayer(Player):
     
     def make_move(self, game: 'Game') -> tuple[tuple[int, int], Move]:
         self.id = game.get_current_player()
-        self.root = GameNode(GameGym(game.get_board()), None, self.__get_available_moves(self.id, game.get_board()), self.id,None) 
+        self.root = GameNode(GameGym(np.array(game.get_board())), None, self.__get_available_moves(self.id, game.get_board()), self.id,None)
         self.game_tree = GameTree(self.root)
         node = self.alpha_beta_search(self.root)
         return (node.move[0], node.move[1]), node.move[2]
@@ -192,3 +204,5 @@ class minMaxPlayer(Player):
     def getUtility(self, node):
         assert node is not None
         return node.value
+    
+  

@@ -2,19 +2,9 @@ from abc import ABC, abstractmethod
 from copy import deepcopy
 from enum import Enum
 import numpy as np
+from game import Move
 
 # Rules on PDF
-
-
-class Move(Enum):
-    '''
-    Selects where you want to place the taken piece. The rest of the pieces are shifted
-    '''
-    TOP = 0
-    BOTTOM = 1
-    LEFT = 2
-    RIGHT = 3
-
 
 class Player(ABC):
     def __init__(self) -> None:
@@ -106,14 +96,15 @@ class GameGym(object):
             return False
         # Oh God, Numpy arrays
         prev_value = deepcopy(self._board[(from_pos[1], from_pos[0])])
-        acceptable = self.__take((from_pos[1], from_pos[0]), player_id)
+        acceptable = self.take((from_pos[1], from_pos[0]), player_id)
         if acceptable:
-            acceptable = self.__slide((from_pos[1], from_pos[0]), slide)
+            acceptable = self.slide((from_pos[1], from_pos[0]), slide)
             if not acceptable:
                 self._board[(from_pos[1], from_pos[0])] = deepcopy(prev_value)
+            
         return acceptable
 
-    def __take(self, from_pos: tuple[int, int], player_id: int) -> bool:
+    def take(self, from_pos: tuple[int, int], player_id: int) -> bool:
         '''Take piece'''
         # acceptable only if in border
         acceptable: bool = (
@@ -131,7 +122,7 @@ class GameGym(object):
             self._board[from_pos] = player_id
         return acceptable
 
-    def __slide(self, from_pos: tuple[int, int], slide: Move) -> bool:
+    def slide(self, from_pos: tuple[int, int], slide: Move) -> bool:
         '''Slide the other pieces'''
         # define the corners
         SIDES = [(0, 0), (0, 4), (4, 0), (4, 4)]
@@ -169,6 +160,7 @@ class GameGym(object):
                 slide == Move.TOP or slide == Move.LEFT)
         # check if the move is acceptable
         acceptable: bool = acceptable_top or acceptable_bottom or acceptable_left or acceptable_right
+       
         # if it is
         if acceptable:
             # take the piece

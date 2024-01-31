@@ -49,27 +49,20 @@ class EsPlayer(Player):
     
     def __mirror_strategy__(self, last_move, board):
         self.mirror_counter +=1
-        #print("MIRROR")
-        #from_pos = (random.randint(0, 4), random.randint(0, 4))
-        #move = random.choice([Move.TOP, Move.BOTTOM, Move.LEFT, Move.RIGHT])
-        #return from_pos, move
+        
         frompos = (last_move[0], last_move[1]) 
         new_row = 0
         new_column = 0
         if board[frompos[1]][frompos[0]]  == 1-self.id or not self.__check_border__(frompos, self.id, board):
-            #if last_move[1] != 0:
+           
             new_row  = randint(0,4)
-            #if last_move[0] != 0:
             new_column = randint(0, 4)
             frompos = (new_row, new_column)
-            #print("Impossible")
         moves = [Move.TOP, Move.BOTTOM, Move.LEFT, Move.RIGHT]
-        #move = random.choice([Move.TOP, Move.BOTTOM, Move.LEFT, Move.RIGHT])
         move = np.random.choice(moves, p = softmax(self.moves_probability))
         return frompos, move
     
     def __greedy_startegy__(self, board):
-        #print("GREEDY")
         self.greedy_counter +=1
         #ROWS
         max_row = -1
@@ -104,7 +97,6 @@ class EsPlayer(Player):
             
         from_pos = (random.randint(0, 4), random.randint(0, 4))
         moves = [Move.TOP, Move.BOTTOM, Move.LEFT, Move.RIGHT]
-        #move = random.choice([Move.TOP, Move.BOTTOM, Move.LEFT, Move.RIGHT])
         move = np.random.choice(moves, p = softmax(self.moves_probability))
         return from_pos, move
 
@@ -120,7 +112,9 @@ class EsPlayer(Player):
         game_board = game.get_board().tolist()
         self.__check_already_in_list__(game_board)
         status =  0 if any(element == -1 for element in game_board) else 1
+        #status is computed by acccounting for free spaces left or not
         if random.random() < self.status[status]:
+            #first move
             if len(self.opponent_moves) == 0:
                 from_pos = (random.randint(0, 4), random.randint(0, 4))
                 move = random.choice([Move.TOP, Move.BOTTOM, Move.LEFT, Move.RIGHT])
@@ -129,16 +123,17 @@ class EsPlayer(Player):
                 from_pos, move = self.__mirror_strategy__(self.opponent_moves[-1], game.get_board())
                 return from_pos, move
         else:
-            #print("GREEDY")
             from_pos, move = self.__greedy_startegy__(game.get_board())
             return from_pos,move
     
     def __mutate__(self, agent):
         offspring = copy(agent)
+        #mutate status
         new_before_threshold = np.random.normal(offspring.status[0], MUTATION)
         new_after_threshold = np.random.normal(offspring.status[1], MUTATION)
         new_moves_probability = []
         for i in range(len(self.moves_probability)):
+             #mutate move
             new_moves_probability.append(np.random.normal(offspring.moves_probability[i], MUTATION))
         offspring.status = (new_before_threshold, new_after_threshold)
         offspring.moves_probability = new_moves_probability
@@ -146,6 +141,7 @@ class EsPlayer(Player):
         return offspring
     
     def __select_parent__tournament__(self, population):
+        #select the best agent fro parent
         pool = [choice(population) for _ in range(TOURNAMENT_SIZE)]
         champion = max(pool, key=lambda i: i.fitness)
         return champion
@@ -165,9 +161,9 @@ class EsPlayer(Player):
             self.moves_probability = agent.moves_probability
             fr.close()
 
-            #print(self.fitness)
-            #print(self.moves_probability)
+            
     def __xover__(self, p1 , p2):
+        #crossover between two parent 
         offspring = copy(p1)
         gene_from_p1 = randint(0, 1)
         gene_from_p2 = 1-gene_from_p1
@@ -184,9 +180,11 @@ class EsPlayer(Player):
             offspring = []
             for i in range(OFFSPRING_SIZE):
                 if random.random() < MUTATION:
+                    #mutate
                     agent = self.__select_parent__tournament__(population)
                     agent = self.__mutate__(agent)
                 else:
+                    #crossover
                     agent1 = self.__select_parent__tournament__(population)
                     agent2 = self.__select_parent__tournament__(population)
                     agent = self.__xover__(agent1,agent2)
@@ -194,6 +192,7 @@ class EsPlayer(Player):
             for agent in offspring:
                  agent.fitness = self.__training_play__(agent)
             population.extend(offspring)
+
             population.sort(key=lambda i: i.fitness, reverse=True)
             population = population[:POPULATION_SIZE]
             fitness_list.append(population[0].fitness)
@@ -214,24 +213,21 @@ class EsPlayer(Player):
         return population
 
     def __training_play__(self, agent):
+        #compute fitness
         win_count = 0
-
         for _ in range(TRAINING_PLAY_SIZE):
             g = Game()
             player1 = agent
             player2 = randomAgent.RandomPlayer()
             winner = g.play(player1, player2)
-            #print("END BOARD")
             if winner == agent.id:
                 win_count+=1
         
         return (win_count/TRAINING_PLAY_SIZE)*100
 
     def play_for_statistics(self):
-        #print(self.table_prob)
         win_count = 0
         self.loadPolicy("policyES")
-       
         for i in  tqdm(range(TRAINING_PLAY_SIZE)):
             g = Game()
             player1 = self
